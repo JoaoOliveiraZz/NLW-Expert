@@ -1,8 +1,30 @@
+import { useState } from "react";
 import NlwLogo from "./assets/logo-nlw-expert.svg";
 import { NewNoteCard } from "./components/newNoteCard";
 import { NoteCard } from "./components/noteCard";
 
+interface Notes {
+  id: string,
+  date: Date,
+  content: string
+}
+
 export function App() {
+
+  const [notes, setNotes] = useState<Notes[]>([])
+
+  function setNotesOnSave(content: string){
+    const newNote: Notes = {
+      id: crypto.randomUUID(),
+      date: new Date,
+      content
+    }
+
+    const notesArray = [newNote, ...notes]
+
+    setNotes(notesArray)
+  }
+
   return (
     <div className="mx-auto max-w-6xl my-12 space-y-6">
       <img src={NlwLogo} alt="Nlw Expert" />
@@ -18,9 +40,15 @@ export function App() {
 
       <div className="grid grid-cols-3 auto-rows-[250px] gap-6">
 
-      <NewNoteCard />
+      <NewNoteCard setNotesOnSave={setNotesOnSave} />
 
-      <NoteCard note={{date: new Date(), content: "Hello World"}} />
+      {
+        notes.map(note => {
+          return (
+            <NoteCard key={note.id} note={note} />
+          )
+        })
+      }
 
       </div>
     </div>
