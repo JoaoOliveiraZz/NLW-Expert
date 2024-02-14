@@ -7,6 +7,8 @@ interface NewNoteCardProps {
   setNotesOnSave: (content: string) => void
 }
 
+let speechRecognition: SpeechRecognition | null = null
+
 export function NewNoteCard({ setNotesOnSave }: NewNoteCardProps){
 
     const [shouldShowOnboarding, setShouldShowOnboarding] = useState(true)
@@ -57,7 +59,7 @@ export function NewNoteCard({ setNotesOnSave }: NewNoteCardProps){
 
       const SpeechRecognitionAPI = window.SpeechRecognition || window.webkitSpeechRecognition
 
-      const speechRecognition = new SpeechRecognitionAPI()
+      speechRecognition = new SpeechRecognitionAPI()
 
       speechRecognition.lang = 'pt-BR'
       speechRecognition.continuous = true
@@ -82,6 +84,10 @@ export function NewNoteCard({ setNotesOnSave }: NewNoteCardProps){
 
     function handleStopRecording(){
       setIsRecording(false)
+
+      if(speechRecognition !== null){
+        speechRecognition.stop()
+      }
     }
 
     return (
